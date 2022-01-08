@@ -28,30 +28,27 @@
                     <div class="form-group">
                         <label> <b> Username </b> </label>
                         <input type="text" class="form-control" th:field="*{username}" required placeholder="Username">
-                        <span th:if="${error != null}" class="text-danger">[[${error}]]</span>
+                        <span th:if="${usernameErr != null}" class="text-danger">[[${usernameErr}]]</span>
                     </div>
                     <div class="form-group">
                         <label> <b> Fullname </b> </label>
                         <input type="text" class="form-control" th:field="*{fullname}" placeholder="Fullname">
-<!--                        <small id="helpId" class="text-muted">Help text</small>-->
                     </div>
 
                     <div class="form-group">
                         <label> <b> Email Address </b> </label>
                         <input type="text" class="form-control" th:field="*{email}" required placeholder="Email Address">
-<!--                        <small id="helpId" class="text-muted">Help text</small>-->
+                        <span th:if="${emailErr != null}" class="text-danger">[[${emailErr}]]</span>
                     </div>
 
                     <div class="form-group">
                         <label> <b> Password </b> </label>
                         <input type="password" class="form-control" th:field="*{password}" id="password" required placeholder="Password">
-<!--                        <small id="helpId" class="text-muted">Help text</small>-->
                     </div>
 
                     <div class="form-group">
                         <label> <b> Confirm Password </b> </label>
                         <input type="password" class="form-control" reqruired onchange="checkPasswordMath(this)" placeholder="Confirm Password">
-<!--                        <small id="helpId" class="text-muted">Help text</small>-->
                     </div>
 
                     <div class="form-group">

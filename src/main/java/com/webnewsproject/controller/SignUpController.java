@@ -31,29 +31,32 @@ public class SignUpController {
 
     @PostMapping("/signup")
     public String doSignup(@ModelAttribute("user") Users user, Model model){
-        Users newuser = userService.findByUsername(user.getUsername());
-        if (newuser == null){
-            //set default role
-            Set<Roles> rolesSet = new HashSet<>();
-            rolesSet.add(rolesService.findByName("ROLE_USER"));
-            user.setRoles(rolesSet);
-
-            //enable account
-            user.setEnable(true);
-
-            //encode password
-            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-            String passwordEncode = encoder.encode(user.getPassword());
-            user.setPassword(passwordEncode);
-
-            //create new account
-            userService.save(user);
-            model.addAttribute("message","Create new account successfully");
-            return "login";
+        if (userService.findByEmail(user.getEmail()) != null){
+            model.addAttribute("emailErr","Email existed!");
+            return "signupform";
         }
 
-        // handle error if account existed
-        model.addAttribute("error","UserName existed!");
-        return "signupform";
+        if (userService.findByEmail(user.getEmail()) != null){
+            model.addAttribute("usernameErr","UserName existed!");
+            return "signupform";
+        }
+
+        //set default role
+        Set<Roles> rolesSet = new HashSet<>();
+        rolesSet.add(rolesService.findByName("ROLE_USER"));
+        user.setRoles(rolesSet);
+
+        //enable account
+        user.setEnable(true);
+
+        //encode password
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        String passwordEncode = encoder.encode(user.getPassword());
+        user.setPassword(passwordEncode);
+
+        //create new account
+        userService.save(user);
+        model.addAttribute("message","Create new account successfully");
+        return "login";
     }
 }

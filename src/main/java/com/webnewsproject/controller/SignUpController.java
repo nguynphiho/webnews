@@ -40,20 +40,12 @@ public class SignUpController {
     @PostMapping("/signup")
     public String doSignup(@ModelAttribute("user") Users user, Model model) throws IOException {
 
-        //handle upload default avatar
-        File file = new File("src/default/usericon.jpg");
-        FileInputStream inputStream = new FileInputStream(file);
-        MultipartFile multipartFile = new MockMultipartFile("file", file.getName(), "image/png", IOUtils.toByteArray(inputStream));
-        String filename = multipartFile.getOriginalFilename();
-        String uploadDir = "./uploads/AvarterUserUploadFolder";
-        UploadService.uploadImage(multipartFile,filename,uploadDir);
-
         if (userService.findByEmail(user.getEmail()) != null){
             model.addAttribute("emailErr","Email existed!");
             return "signupform";
         }
 
-        if (userService.findByEmail(user.getEmail()) != null){
+        if (userService.findByUsername(user.getUsername()) != null){
             model.addAttribute("usernameErr","UserName existed!");
             return "signupform";
         }
@@ -70,6 +62,14 @@ public class SignUpController {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         String passwordEncode = encoder.encode(user.getPassword());
         user.setPassword(passwordEncode);
+
+        //handle upload default avatar
+        File file = new File("src/default/usericon.png");
+        FileInputStream inputStream = new FileInputStream(file);
+        MultipartFile multipartFile = new MockMultipartFile("file", file.getName(), "image/png", IOUtils.toByteArray(inputStream));
+        String filename = multipartFile.getOriginalFilename();
+        String uploadDir = "./uploads/AvarterUserUploadFolder";
+        UploadService.uploadImage(multipartFile,filename,uploadDir);
 
         //create new account
         userService.save(user);

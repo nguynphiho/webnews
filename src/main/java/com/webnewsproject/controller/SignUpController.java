@@ -3,15 +3,23 @@ package com.webnewsproject.controller;
 import com.webnewsproject.domain.Roles;
 import com.webnewsproject.domain.Users;
 import com.webnewsproject.service.RolesService;
+import com.webnewsproject.service.UploadService;
 import com.webnewsproject.service.UserService;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -30,7 +38,16 @@ public class SignUpController {
     }
 
     @PostMapping("/signup")
-    public String doSignup(@ModelAttribute("user") Users user, Model model){
+    public String doSignup(@ModelAttribute("user") Users user, Model model) throws IOException {
+
+        //handle upload default avatar
+        File file = new File("src/default/usericon.jpg");
+        FileInputStream inputStream = new FileInputStream(file);
+        MultipartFile multipartFile = new MockMultipartFile("file", file.getName(), "image/png", IOUtils.toByteArray(inputStream));
+        String filename = multipartFile.getOriginalFilename();
+        String uploadDir = "./uploads/AvarterUserUploadFolder";
+        UploadService.uploadImage(multipartFile,filename,uploadDir);
+
         if (userService.findByEmail(user.getEmail()) != null){
             model.addAttribute("emailErr","Email existed!");
             return "signupform";

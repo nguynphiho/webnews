@@ -37,7 +37,7 @@
 
                     <div class="form-group">
                         <label> <b> Email Address </b> </label>
-                        <input type="text" class="form-control" th:field="*{email}" required placeholder="Email Address">
+                        <input type="email" class="form-control" th:field="*{email}" required placeholder="Email Address">
                         <span th:if="${emailErr != null}" class="text-danger">[[${emailErr}]]</span>
                     </div>
 

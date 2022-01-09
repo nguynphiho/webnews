@@ -45,10 +45,10 @@ public class Users implements Serializable {
     @Transient
     private String avartarPath;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Likes> likes;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Comments> comments;
 
     @OneToMany(mappedBy = "user")

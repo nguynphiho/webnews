@@ -90,7 +90,7 @@ public class UserController {
             return "redirect:/admin/add-user";
         }
 
-        if (userService.findByEmail(user.getEmail()) != null){
+        if (userService.findByEmail(user.getEmail()) != null && oldPassword.equals("")){
             ra.addFlashAttribute("emailErr", "Email was existed");
             return "redirect:/admin/add-user";
         }

@@ -70,6 +70,7 @@ public class SignUpController {
         String filename = multipartFile.getOriginalFilename();
         String uploadDir = "./uploads/AvarterUserUploadFolder";
         UploadService.uploadImage(multipartFile,filename,uploadDir);
+        user.setAvartar(filename);
 
         //create new account
         userService.save(user);
